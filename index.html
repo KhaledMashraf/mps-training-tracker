@@ -3,737 +3,770 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MPS Week 1 Training Tracker | ABM OLAYAN</title>
+<title>MPS Training Tracker</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;min-height:100vh;color:#1a1a2e}
-/* HEADER */
-.header{background:linear-gradient(135deg,#0d2137 0%,#1a3a5c 100%);color:#fff;padding:20px 28px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-.org-label{font-size:11px;letter-spacing:2px;color:#7ecfff;font-weight:600;display:flex;align-items:center;gap:8px}
-.org-dot{width:8px;height:8px;background:#4caf50;border-radius:50%;display:inline-block}
-.autosave{font-size:11px;color:#7ecfff;opacity:.7}
-.header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px}
-.header h1 span{color:#4fc3f7}
-.header-sub{font-size:12px;color:#90caf9;margin-top:3px;margin-bottom:12px}
-.progress-bar-wrap{background:rgba(255,255,255,.12);height:4px;border-radius:2px;margin-bottom:0}
-.progress-bar-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,#4caf50,#81c784);transition:width .5s}
-.progress-pct{position:absolute;right:28px;top:58px;font-size:13px;font-weight:700;color:#fff}
-/* TABS */
-.tabs{background:#fff;border-bottom:1px solid #e0e7ef;display:flex;padding:0 20px}
-.tab{padding:13px 20px;cursor:pointer;font-size:13.5px;font-weight:500;color:#6b7a8d;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px;transition:all .2s;user-select:none}
-.tab:hover{color:#1a3a5c}
-.tab.active{color:#1a3a5c;border-bottom-color:#1a3a5c;font-weight:600}
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:#fff;border-bottom:1px solid #e0e7ef}
-.stat-card{padding:18px 24px;border-right:1px solid #e0e7ef}
-.stat-card:last-child{border-right:none}
-.stat-num{font-size:32px;font-weight:700;line-height:1}
-.stat-label{font-size:11px;letter-spacing:1.5px;color:#8a97a8;margin-top:4px;font-weight:600}
-.stat-card.visible .stat-num{color:#1a3a5c}
-.stat-card.done .stat-num{color:#2e7d32}
-.stat-card.inprog .stat-num{color:#e65100}
-.stat-card.blocked .stat-num{color:#b71c1c}
-.stat-card.notstart .stat-num{color:#37474f}
-.stat-card .bar{height:3px;border-radius:2px;margin-top:10px;background:#e8edf2}
-.stat-card.done .bar-fill{background:#4caf50}
-.stat-card.inprog .bar-fill{background:#ff9800}
-.stat-card.blocked .bar-fill{background:#f44336}
-.stat-card.notstart .bar-fill{background:#90a4ae}
-.bar-fill{height:3px;border-radius:2px;transition:width .4s}
-/* CONTENT */
-.content{padding:20px 24px;max-width:1400px;margin:0 auto}
-/* TOOLBAR */
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.search-box{flex:1;min-width:200px;padding:9px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:13.5px;outline:none;transition:border .2s}
-.search-box:focus{border-color:#1a3a5c}
-.filter-btns{display:flex;gap:4px;flex-wrap:wrap}
-.filter-btn{padding:7px 14px;border-radius:20px;border:1.5px solid #dde3ec;background:#fff;font-size:12.5px;cursor:pointer;font-weight:500;color:#6b7a8d;transition:all .2s}
-.filter-btn:hover{border-color:#1a3a5c;color:#1a3a5c}
-.filter-btn.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
-/* GROUP */
-.group{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden}
-.group-header{background:#1a3a5c;color:#fff;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-.group-header h3{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px}
-.group-toggle{font-size:14px;opacity:.7;transition:transform .2s}
-.group-toggle.collapsed{transform:rotate(-90deg)}
-.group-count{font-size:12px;opacity:.8;margin-left:auto;margin-right:12px}
-.group-progress-mini{width:80px;height:4px;background:rgba(255,255,255,.2);border-radius:2px}
-.group-progress-fill{height:4px;background:#4caf50;border-radius:2px;transition:width .3s}
-/* ITEM */
-.item-row{border-bottom:1px solid #f0f4f8;padding:12px 18px;display:flex;align-items:flex-start;gap:14px;transition:background .15s}
-.item-row:last-child{border-bottom:none}
-.item-row:hover{background:#f8fafd}
-.item-num{font-size:11px;color:#a0aab4;min-width:22px;padding-top:2px;font-weight:600}
-.item-check{width:18px;height:18px;border:2px solid #c9d3dd;border-radius:4px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s}
-.item-check.done-check{background:#2e7d32;border-color:#2e7d32;color:#fff}
-.item-check.inprog-check{background:#fff3e0;border-color:#ff9800}
-.item-check.blocked-check{background:#ffebee;border-color:#f44336}
-.item-body{flex:1}
-.item-title{font-size:13.5px;font-weight:600;color:#1a2a3a;margin-bottom:2px}
-.item-desc{font-size:12px;color:#7a8899;line-height:1.4}
-.item-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
-.priority-badge{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.3px}
-.priority-high{background:#fdecea;color:#c62828}
-.priority-medium{background:#fff3e0;color:#e65100}
-.priority-low{background:#e8f5e9;color:#2e7d32}
-.status-btn{font-size:11px;padding:4px 10px;border-radius:5px;border:1.5px solid #dde3ec;cursor:pointer;background:#fff;color:#6b7a8d;font-weight:500;transition:all .15s}
-.status-btn:hover{border-color:#1a3a5c}
-.status-select{font-size:11.5px;padding:4px 8px;border:1.5px solid #dde3ec;border-radius:5px;cursor:pointer;background:#fff;color:#444;font-weight:500}
-.status-select.status-done{background:#e8f5e9;border-color:#66bb6a;color:#2e7d32}
-.status-select.status-inprog{background:#fff3e0;border-color:#ffa726;color:#e65100}
-.status-select.status-blocked{background:#ffebee;border-color:#ef9a9a;color:#c62828}
-.status-select.status-notstart{background:#fff;color:#444}
-/* MANAGE ITEMS */
-.manage-toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
-.btn-primary{background:#1a3a5c;color:#fff;border:none;padding:9px 16px;border-radius:7px;font-size:13px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px}
-.btn-secondary{background:#fff;color:#4a5568;border:1.5px solid #dde3ec;padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer;font-weight:500}
-.btn-secondary:hover,.btn-primary:hover{opacity:.85}
-.manage-table{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
-.table-header{display:grid;grid-template-columns:50px 1fr 160px 100px 130px 90px 120px;background:#1a3a5c;color:#fff;font-size:11.5px;font-weight:700;letter-spacing:1px;padding:11px 16px}
-.table-row{display:grid;grid-template-columns:50px 1fr 160px 100px 130px 90px 120px;padding:11px 16px;border-bottom:1px solid #f0f4f8;font-size:13px;align-items:center}
-.table-row:last-child{border-bottom:none}
-.table-row:hover{background:#f8fafd}
-.topic-chip{font-size:11px;padding:3px 9px;border-radius:20px;background:#e3f2fd;color:#1565c0;font-weight:600;white-space:nowrap}
-.action-btns{display:flex;gap:5px}
-.act-btn{font-size:11px;padding:3px 9px;border-radius:4px;border:1px solid #dde3ec;cursor:pointer;background:#fff;color:#555}
-.act-btn:hover{background:#f0f4f8}
-.act-btn.del{border-color:#ffcdd2;color:#c62828}
-.act-btn.del:hover{background:#ffebee}
-.visible-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
-.v-yes{background:#e8f5e9;color:#2e7d32}
-.v-no{background:#f5f5f5;color:#9e9e9e}
-/* DASHBOARD */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
-.dash-card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
-.dash-card-header{background:#1a3a5c;color:#fff;padding:12px 18px;font-size:13.5px;font-weight:700}
-.dash-card-body{padding:18px}
-.group-progress-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.group-progress-row:last-child{margin-bottom:0}
-.group-name{font-size:13px;width:160px;flex-shrink:0;color:#374151;font-weight:500}
-.gp-bar-wrap{flex:1;height:8px;background:#e8edf2;border-radius:4px}
-.gp-bar-fill{height:8px;background:#4caf50;border-radius:4px;transition:width .4s}
-.gp-count{font-size:12px;color:#6b7a8d;min-width:36px;text-align:right;font-weight:600}
-/* Donut */
-.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-.donut-svg{width:150px;height:150px}
-.donut-legend{display:flex;flex-direction:column;gap:7px;width:100%}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#374151}
-.legend-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
-/* KPI */
-.kpi-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f0f4f8}
-.kpi-item:last-child{border-bottom:none}
-.kpi-name{font-size:13.5px;font-weight:600;color:#1a2a3a}
-.kpi-target{font-size:12px;color:#4fc3f7;font-weight:600}
-.kpi-input{padding:6px 12px;border:1.5px solid #dde3ec;border-radius:6px;font-size:13px;min-width:120px;text-align:center;color:#374151}
-/* Assessment */
-.assess-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid #f0f4f8}
-.assess-row:last-child{border-bottom:none}
-.assess-name{font-size:13.5px;font-weight:500;color:#1a2a3a}
-.score-btns{display:flex;gap:5px}
-.score-btn{width:32px;height:32px;border-radius:6px;border:1.5px solid #dde3ec;background:#fff;cursor:pointer;font-size:13px;font-weight:700;color:#6b7a8d;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.score-btn:hover,.score-btn.selected{background:#1a3a5c;border-color:#1a3a5c;color:#fff}
-/* SIGN-OFF */
-.signoff-card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);padding:24px;margin-bottom:16px}
-.signoff-title{font-size:16px;font-weight:700;color:#1a2a3a;margin-bottom:6px}
-.signoff-sub{font-size:13px;color:#6b7a8d;margin-bottom:18px}
-.signoff-field{margin-bottom:16px}
-.signoff-field label{font-size:12.5px;font-weight:600;color:#374151;display:block;margin-bottom:6px}
-.signoff-field input,.signoff-field textarea,.signoff-field select{width:100%;padding:9px 13px;border:1.5px solid #dde3ec;border-radius:7px;font-size:13.5px;color:#1a2a3a;outline:none;transition:border .2s;font-family:inherit}
-.signoff-field input:focus,.signoff-field textarea:focus{border-color:#1a3a5c}
-.signoff-field textarea{resize:vertical;min-height:80px}
-.signoff-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.readiness-bar{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid #dde3ec;margin-top:10px}
-.ready-opt{flex:1;text-align:center;padding:10px;font-size:12.5px;font-weight:600;cursor:pointer;color:#6b7a8d;transition:all .15s}
-.ready-opt.active-ready{background:#e8f5e9;color:#2e7d32}
-.ready-opt.active-notready{background:#ffebee;color:#c62828}
-.submit-btn{background:#2e7d32;color:#fff;border:none;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;transition:opacity .2s}
-.submit-btn:hover{opacity:.88}
-.signoff-complete{text-align:center;padding:28px;background:#e8f5e9;border-radius:10px;border:2px solid #a5d6a7}
-.signoff-complete h3{font-size:20px;color:#2e7d32;margin-bottom:8px}
-.signoff-complete p{font-size:14px;color:#388e3c}
-/* HIDDEN */
-.hidden{display:none!important}
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center}
-.modal{background:#fff;border-radius:12px;padding:28px;width:520px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2)}
-.modal h3{font-size:17px;font-weight:700;margin-bottom:18px;color:#1a2a3a}
-.modal-field{margin-bottom:14px}
-.modal-field label{font-size:12.5px;font-weight:600;color:#374151;display:block;margin-bottom:5px}
-.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:9px 12px;border:1.5px solid #dde3ec;border-radius:7px;font-size:13.5px;outline:none;font-family:inherit}
-.modal-field input:focus,.modal-field select:focus{border-color:#1a3a5c}
-.modal-field textarea{resize:vertical;min-height:70px}
-.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-.btn-cancel{background:#f5f7fa;color:#6b7a8d;border:1.5px solid #dde3ec;padding:9px 20px;border-radius:7px;font-size:13.5px;cursor:pointer;font-weight:600}
-.btn-save{background:#1a3a5c;color:#fff;border:none;padding:9px 20px;border-radius:7px;font-size:13.5px;cursor:pointer;font-weight:600}
-/* RESPONSIVE */
-@media(max-width:768px){
-  .stats-row{grid-template-columns:repeat(3,1fr)}
-  .dash-grid{grid-template-columns:1fr}
-  .signoff-grid{grid-template-columns:1fr}
-  .table-header,.table-row{grid-template-columns:40px 1fr 100px 90px}
-  .table-row .topic-cell,.table-row .visible-cell,.table-row .action-cell{display:none}
+:root {
+  --primary: #1a56db;
+  --primary-dark: #1e40af;
+  --bg: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --danger: #e02424;
+  --radius: 10px;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+#login-screen { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg,#1a56db 0%,#7c3aed 100%); padding:20px; }
+.login-box { background:white; border-radius:16px; padding:40px; width:100%; max-width:480px; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+.login-title { font-size:22px; font-weight:700; text-align:center; margin-bottom:6px; }
+.login-subtitle { color:var(--muted); text-align:center; font-size:14px; margin-bottom:28px; }
+.role-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+.role-card { border:2px solid var(--border); border-radius:12px; padding:20px 12px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.role-card:hover { border-color:var(--primary); }
+.role-card.selected { border-color:var(--primary); background:#eff6ff; }
+.role-card .icon { font-size:32px; margin-bottom:8px; }
+.role-card .label { font-weight:600; font-size:15px; }
+.role-card .desc { font-size:12px; color:var(--muted); margin-top:4px; }
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--muted); }
+.form-group input, .form-group select { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:15px; outline:none; }
+.form-group input:focus, .form-group select:focus { border-color:var(--primary); }
+.btn-login { width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; }
+.btn-login:hover { background:var(--primary-dark); }
+.login-error { color:var(--danger); font-size:13px; text-align:center; margin-top:10px; display:none; }
+#app-screen { display:none; min-height:100vh; flex-direction:column; }
+.app-header { background:var(--primary); color:white; padding:0 20px; display:flex; align-items:center; justify-content:space-between; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+.app-title { font-size:16px; font-weight:700; }
+.header-right { display:flex; align-items:center; gap:12px; }
+.user-badge { font-size:13px; opacity:0.9; }
+.sync-badge { font-size:12px; background:rgba(255,255,255,0.15); padding:3px 8px; border-radius:20px; }
+.btn-logout { background:rgba(255,255,255,0.15); border:none; color:white; padding:5px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
+.btn-logout:hover { background:rgba(255,255,255,0.25); }
+.tabs-bar { background:white; border-bottom:1px solid var(--border); display:flex; overflow-x:auto; padding:0 16px; }
+.tab-btn { padding:14px 18px; border:none; background:none; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+.tab-btn:hover { color:var(--primary); }
+.tab-btn.active { color:var(--primary); border-bottom-color:var(--primary); }
+.tab-panel { display:none; padding:20px; max-width:1100px; margin:0 auto; width:100%; }
+.tab-panel.active { display:block; }
+.card { background:white; border-radius:var(--radius); border:1px solid var(--border); margin-bottom:16px; overflow:hidden; }
+.card-header { padding:14px 16px; border-bottom:1px solid var(--border); font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:space-between; }
+.card-body { padding:16px; }
+.items-table { width:100%; border-collapse:collapse; font-size:14px; }
+.items-table th { background:#f9fafb; padding:10px 12px; text-align:left; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
+.items-table td { padding:10px 12px; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
+.items-table tr:last-child td { border-bottom:none; }
+.items-table tr:hover td { background:#f9fafb; }
+.item-text { font-weight:600; font-size:14px; }
+.item-desc { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.4; }
+.tp-table { width:100%; border-collapse:collapse; font-size:14px; }
+.tp-table th { background:#f9fafb; padding:10px 14px; text-align:left; font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; border-bottom:2px solid var(--border); }
+.tp-table td { padding:12px 14px; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
+.tp-table tr:hover td { background:#f9fafb; }
+.status-select { padding:4px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; cursor:pointer; background:white; }
+.badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+.b-ns { background:#f3f4f6; color:var(--muted); }
+.b-ip { background:#fef3c7; color:#92400e; }
+.b-ok { background:#d1fae5; color:#065f46; }
+.b-hi { background:#ede9fe; color:#5b21b6; }
+.b-med { background:#fff7ed; color:#c2410c; }
+.score-btns { display:flex; gap:4px; }
+.sbtn { width:28px; height:28px; border:1px solid var(--border); border-radius:6px; background:white; font-size:12px; font-weight:600; cursor:pointer; color:var(--muted); transition:all 0.15s; }
+.sbtn:hover { border-color:var(--primary); color:var(--primary); }
+.sbtn.active { background:var(--primary); color:white; border-color:var(--primary); }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:20px; }
+.stat-card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; }
+.stat-num { font-size:28px; font-weight:700; color:var(--primary); }
+.stat-lbl { font-size:12px; color:var(--muted); margin-top:4px; }
+.pbar { background:#e5e7eb; border-radius:99px; height:8px; overflow:hidden; }
+.pfill { height:100%; border-radius:99px; background:var(--primary); transition:width 0.3s; }
+.btn { padding:8px 16px; border-radius:8px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.btn-p { background:var(--primary); color:white; }
+.btn-p:hover { background:var(--primary-dark); }
+.btn-d { background:#fee2e2; color:var(--danger); }
+.btn-d:hover { background:#fecaca; }
+.btn-b { background:#eff6ff; color:var(--primary); }
+.btn-b:hover { background:#dbeafe; }
+.btn-sm { padding:5px 10px; font-size:12px; }
+.frow { display:flex; gap:10px; margin-bottom:12px; align-items:flex-end; flex-wrap:wrap; }
+.frow input, .frow select { flex:1; min-width:120px; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none; }
+.frow input:focus, .frow select:focus { border-color:var(--primary); }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.kpi-item { background:#f9fafb; border-radius:8px; padding:12px; }
+.kpi-lbl { font-size:12px; font-weight:600; color:var(--muted); margin-bottom:6px; }
+.kpi-inp { width:100%; padding:6px 10px; border:1.5px solid var(--border); border-radius:6px; font-size:15px; font-weight:700; text-align:center; outline:none; }
+.kpi-inp:focus { border-color:var(--primary); }
+.modal-ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
+.modal-ov.open { display:flex; }
+.modal-box { background:white; border-radius:12px; padding:24px; width:90%; max-width:440px; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto; }
+.modal-title { font-size:16px; font-weight:700; margin-bottom:16px; }
+.chk-list { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; max-height:280px; overflow-y:auto; }
+.chk-item { display:flex; align-items:center; gap:10px; font-size:14px; cursor:pointer; padding:7px 10px; border-radius:7px; border:1px solid transparent; }
+.chk-item:hover { background:#f9fafb; border-color:var(--border); }
+.chk-item input[type=checkbox] { width:16px; height:16px; cursor:pointer; flex-shrink:0; }
+.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; }
+.modal-divider { border:none; border-top:1px solid var(--border); margin:14px 0; }
+.signoff-box { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:24px; }
+.signoff-done { background:#d1fae5; border:1px solid #6ee7b7; border-radius:10px; padding:24px; }
+.empty { text-align:center; padding:40px; color:var(--muted); }
+.empty .icon { font-size:48px; margin-bottom:12px; }
+@media(max-width:600px){.role-cards{grid-template-columns:1fr;}.tab-btn{padding:12px 10px;font-size:12px;}.stats-grid{grid-template-columns:repeat(2,1fr);}.login-box{padding:28px 20px;}}
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<div class="header" style="position:relative">
-  <div class="header-top">
-    <div class="org-label"><span class="org-dot"></span> ABM OLAYAN &nbsp;Â·&nbsp; MPS DIVISION</div>
-    <div class="autosave">Auto-saved</div>
-  </div>
-  <h1>Week 1 Training <span>Tracker</span></h1>
-  <div class="header-sub">Phase 1 &nbsp;Â·&nbsp; 21 items &nbsp;Â·&nbsp; 5 topic groups</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px">
-    <span style="font-size:11px;letter-spacing:1.5px;color:#90caf9;font-weight:600">OVERALL PROGRESS</span>
-    <span id="pct-label" style="font-size:14px;font-weight:700;color:#fff">0%</span>
-  </div>
-  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="main-progress" style="width:0%"></div></div>
-</div>
-
-<!-- TABS -->
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('daily')" id="tab-daily">ð Daily Plan</div>
-  <div class="tab" onclick="switchTab('manage')" id="tab-manage">âï¸ Manage Items</div>
-  <div class="tab" onclick="switchTab('dashboard')" id="tab-dashboard">ð Dashboard</div>
-  <div class="tab" onclick="switchTab('signoff')" id="tab-signoff">ð Sign-Off</div>
-</div>
-
-<!-- STATS -->
-<div class="stats-row">
-  <div class="stat-card visible">
-    <div class="stat-num" id="stat-visible">21</div>
-    <div class="stat-label">VISIBLE</div>
-    <div class="bar"><div class="bar-fill" style="width:100%;background:#1a3a5c"></div></div>
-  </div>
-  <div class="stat-card done">
-    <div class="stat-num" id="stat-done">0</div>
-    <div class="stat-label">DONE</div>
-    <div class="bar"><div class="bar-fill" id="bar-done" style="width:0%"></div></div>
-  </div>
-  <div class="stat-card inprog">
-    <div class="stat-num" id="stat-inprog">0</div>
-    <div class="stat-label">IN PROGRESS</div>
-    <div class="bar"><div class="bar-fill" id="bar-inprog" style="width:0%"></div></div>
-  </div>
-  <div class="stat-card blocked">
-    <div class="stat-num" id="stat-blocked">0</div>
-    <div class="stat-label">BLOCKED</div>
-    <div class="bar"><div class="bar-fill" id="bar-blocked" style="width:0%"></div></div>
-  </div>
-  <div class="stat-card notstart">
-    <div class="stat-num" id="stat-notstart">21</div>
-    <div class="stat-label">NOT STARTED</div>
-    <div class="bar"><div class="bar-fill" id="bar-notstart" style="width:100%"></div></div>
-  </div>
-</div>
-
-<!-- DAILY PLAN TAB -->
-<div id="page-daily" class="content">
-  <div class="toolbar">
-    <input class="search-box" id="search-input" placeholder="Search items..." oninput="renderDaily()">
-    <div class="filter-btns">
-      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('not-started',this)">Not Started</button>
-      <button class="filter-btn" onclick="setFilter('in-progress',this)">In Progress</button>
-      <button class="filter-btn" onclick="setFilter('done',this)">Done</button>
-      <button class="filter-btn" onclick="setFilter('blocked',this)">Blocked</button>
-      <button class="filter-btn" onclick="setFilter('hidden',this)">Hidden</button>
-    </div>
-  </div>
-  <div id="daily-list"></div>
-</div>
-
-<!-- MANAGE ITEMS TAB -->
-<div id="page-manage" class="content hidden">
-  <div class="manage-toolbar">
-    <button class="btn-primary" onclick="openAddModal()">+ Add New Item</button>
-    <button class="btn-secondary" onclick="showAllHidden()">Show All Hidden</button>
-    <button class="btn-secondary" onclick="hideAll()">Hide All</button>
-    <button class="btn-secondary" onclick="resetStatuses()">Reset Statuses</button>
-  </div>
-  <div class="manage-table">
-    <div class="table-header">
-      <div>#</div><div>TITLE</div><div>TOPIC GROUP</div><div>PRIORITY</div><div>STATUS</div><div>VISIBLE</div><div>ACTIONS</div>
-    </div>
-    <div id="manage-list"></div>
-  </div>
-</div>
-
-<!-- DASHBOARD TAB -->
-<div id="page-dashboard" class="content hidden">
-  <div class="dash-grid">
-    <div class="dash-card">
-      <div class="dash-card-header">Progress by Topic Group</div>
-      <div class="dash-card-body" id="group-progress-chart"></div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-card-header">Status Breakdown</div>
-      <div class="dash-card-body">
-        <div class="donut-wrap">
-          <svg class="donut-svg" viewBox="0 0 100 100" id="donut-svg"></svg>
-          <div class="donut-legend" id="donut-legend"></div>
-        </div>
+ 
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">🏭 MPS Training Tracker</div>
+    <div class="login-subtitle">ABM Olayan — MPS Engineer Training</div>
+    <div class="role-cards">
+      <div class="role-card" id="role-manager" onclick="selectRole('manager')">
+        <div class="icon">👔</div><div class="label">Manager</div><div class="desc">Full access</div>
+      </div>
+      <div class="role-card" id="role-trainee" onclick="selectRole('trainee')">
+        <div class="icon">🎓</div><div class="label">Trainee</div><div class="desc">My progress</div>
       </div>
     </div>
-    <div class="dash-card">
-      <div class="dash-card-header">KPI Targets</div>
-      <div class="dash-card-body">
-        <div class="kpi-item">
-          <div><div class="kpi-name">Systems set up &amp; accessible</div><div class="kpi-target">100% by Day 1</div></div>
-          <input class="kpi-input" id="kpi1" placeholder="Result" value="">
-        </div>
-        <div class="kpi-item">
-          <div><div class="kpi-name">Hardware tasks completed</div><div class="kpi-target">â¥ 4 of 4</div></div>
-          <input class="kpi-input" id="kpi2" placeholder="Result" value="">
-        </div>
-        <div class="kpi-item">
-          <div><div class="kpi-name">Servers installed</div><div class="kpi-target">Both by Day 3</div></div>
-          <input class="kpi-input" id="kpi3" placeholder="Result" value="">
-        </div>
-        <div class="kpi-item">
-          <div><div class="kpi-name">Training portals activated</div><div class="kpi-target">MyQ + Papercut</div></div>
-          <input class="kpi-input" id="kpi4" placeholder="Result" value="">
-        </div>
+    <div id="manager-fields" style="display:none">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="mgr-pass" placeholder="Enter manager password">
       </div>
     </div>
-    <div class="dash-card">
-      <div class="dash-card-header">Supervisor Assessment (1â5)</div>
-      <div class="dash-card-body" id="assess-panel">
-        <div class="assess-row">
-          <div class="assess-name">Toshiba hardware knowledge</div>
-          <div class="score-btns" data-key="assess1"></div>
-        </div>
-        <div class="assess-row">
-          <div class="assess-name">Network configuration</div>
-          <div class="score-btns" data-key="assess2"></div>
-        </div>
-        <div class="assess-row">
-          <div class="assess-name">MyQ server setup</div>
-          <div class="score-btns" data-key="assess3"></div>
-        </div>
-        <div class="assess-row">
-          <div class="assess-name">PaperCut setup</div>
-          <div class="score-btns" data-key="assess4"></div>
-        </div>
-        <div class="assess-row">
-          <div class="assess-name">Customer communication</div>
-          <div class="score-btns" data-key="assess5"></div>
-        </div>
+    <div id="trainee-fields" style="display:none">
+      <div class="form-group">
+        <label>Select Your Name</label>
+        <select id="trainee-sel"><option value="">Loading...</option></select>
       </div>
     </div>
+    <button class="btn-login" onclick="doLogin()">Enter</button>
+    <div class="login-error" id="login-error"></div>
   </div>
 </div>
-
-<!-- SIGN-OFF TAB -->
-<div id="page-signoff" class="content hidden">
-  <div id="signoff-form">
-    <div class="signoff-card">
-      <div class="signoff-title">Week 1 Readiness Sign-Off</div>
-      <div class="signoff-sub">Complete this form to confirm Week 1 training completion. Both trainee and supervisor must agree on readiness.</div>
-      <div class="signoff-grid">
-        <div class="signoff-field"><label>Trainee Name</label><input id="so-name" placeholder="Full name" value=""></div>
-        <div class="signoff-field"><label>Supervisor Name</label><input id="so-supervisor" placeholder="Supervisor name" value="Khaled"></div>
-        <div class="signoff-field"><label>Sign-Off Date</label><input id="so-date" type="date" value=""></div>
-        <div class="signoff-field"><label>Division</label><input id="so-division" value="MPS Division" readonly style="background:#f9f9f9"></div>
-      </div>
-      <div class="signoff-field">
-        <label>Summary of Achievements</label>
-        <textarea id="so-summary" placeholder="Summarise key achievements and completed milestones from Week 1..."></textarea>
-      </div>
-      <div class="signoff-field">
-        <label>Areas for Follow-Up</label>
-        <textarea id="so-followup" placeholder="Note any items to revisit or continue in Week 2..."></textarea>
-      </div>
-      <div class="signoff-field">
-        <label>Week 1 Readiness</label>
-        <div class="readiness-bar" id="readiness-bar">
-          <div class="ready-opt" onclick="setReady('ready',this)">â Ready for Week 2</div>
-          <div class="ready-opt" onclick="setReady('notready',this)">â ï¸ Needs More Time</div>
-        </div>
-      </div>
-      <button class="submit-btn" onclick="submitSignOff()">Submit Sign-Off</button>
+ 
+<div id="app-screen">
+  <div class="app-header">
+    <div class="app-title">🏭 MPS Training Tracker</div>
+    <div class="header-right">
+      <span class="user-badge" id="user-badge"></span>
+      <span class="sync-badge" id="sync-badge">Synced ✓</span>
+      <button class="btn-logout" onclick="doLogout()">Logout</button>
     </div>
   </div>
-  <div id="signoff-done" class="hidden">
-    <div class="signoff-complete">
-      <h3>â Sign-Off Complete</h3>
-      <p>Week 1 training has been officially signed off. Well done!</p>
-      <p style="margin-top:12px;font-size:12px;color:#555" id="so-summary-display"></p>
-    </div>
-  </div>
+  <div class="tabs-bar" id="tabs-bar"></div>
+  <div id="panels-container"></div>
 </div>
-
-<!-- MODAL -->
-<div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h3 id="modal-title">Add New Item</h3>
-    <div class="modal-field"><label>Title</label><input id="m-title" placeholder="Item title"></div>
-    <div class="modal-field"><label>Description</label><textarea id="m-desc" placeholder="Short description..."></textarea></div>
-    <div class="modal-field"><label>Topic Group</label>
-      <select id="m-group">
-        <option>Orientation &amp; Access</option>
-        <option>Toshiba Hardware</option>
-        <option>Software Install</option>
-        <option>Toshiba Deep Dive</option>
-        <option>MyQ Advanced</option>
-      </select>
-    </div>
-    <div class="modal-field"><label>Priority</label>
-      <select id="m-priority"><option>High</option><option>Medium</option><option>Low</option></select>
-    </div>
+ 
+<!-- ASSIGN MODAL -->
+<div class="modal-ov" id="assign-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="assign-title">Assign Item</div>
+    <label class="chk-item" style="background:#f0fdf4;border:1px solid #bbf7d0;padding:10px 12px;border-radius:8px;margin-bottom:4px">
+      <input type="checkbox" id="assign-all-chk" onchange="toggleAssignAll()">
+      <span style="font-weight:700;color:#065f46">Assign to ALL Trainees</span>
+    </label>
+    <hr class="modal-divider">
+    <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px" id="modal-specific-label">Or select specific trainees:</div>
+    <div class="chk-list" id="assign-list"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveItem()">Save Item</button>
+      <button class="btn" style="background:#f3f4f6" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-p" onclick="saveAssign()">Save Assignment</button>
     </div>
   </div>
 </div>
-
+ 
 <script>
-// âââ DATA âââââââââââââââââââââââââââââââââââââââââââ
-const GROUPS = [
-  'Orientation & Access',
-  'Toshiba Hardware',
-  'Software Install',
-  'Toshiba Deep Dive',
-  'MyQ Advanced'
+const BIN_ID='69fad948aaba882197787296';
+const MASTER_KEY='$2a$10$OiSQwRUUkyHIQ3WPOFfHxuZ4JglDAz8.3EkcIErNCrcEI6d4F4Yyu';
+const MANAGER_PASS='MPS@2025';
+const API_BASE='https://api.jsonbin.io/v3/b/'+BIN_ID;
+ 
+const KPI_DEFS=[
+  {key:'attendance',label:'Attendance %'},
+  {key:'punctuality',label:'Punctuality %'},
+  {key:'taskCompletion',label:'Task Completion %'},
+  {key:'safetyCompliance',label:'Safety Compliance %'},
+  {key:'qualityScore',label:'Quality Score %'},
 ];
-
-const DEFAULT_ITEMS = [
+ 
+const DEFAULT_ITEMS=[
   // Orientation & Access
-  {id:2,  title:'Systems access granted',          desc:'CRM, Ticketing, SharePoint, internal knowledge base â all accessible',                          group:'Orientation & Access', priority:'High',   status:'not-started', visible:true},
-  {id:3,  title:'Supervisor intro meeting',         desc:'1-hour meeting with Khaled â role, expectations, and plan reviewed',                             group:'Orientation & Access', priority:'High',   status:'not-started', visible:true},
-  {id:4,  title:'MPS Division overview read',       desc:'Read and understood MPS Division overview document',                                              group:'Orientation & Access', priority:'High',   status:'not-started', visible:true},
-  {id:5,  title:'MyQ Training Portal activated',    desc:'Account created on MyQ official training portal and first module started',                       group:'Orientation & Access', priority:'High',   status:'not-started', visible:true},
-  {id:8,  title:'TCE/Disty Access',                 desc:'Common Toshiba error codes reviewed â knows top 20 and their causes',                            group:'Orientation & Access', priority:'Medium', status:'not-started', visible:true},
-  {id:50, title:'Papercut Training Portal activated',desc:'Account created on Papercut official training portal and first module started',                  group:'Orientation & Access', priority:'High',   status:'not-started', visible:true},
+  {id:'i1', group:'Orientation & Access', text:'Systems access granted',           desc:'CRM, Ticketing, SharePoint, internal knowledge base — all accessible',                                        priority:'High',   assignedTo:'all'},
+  {id:'i2', group:'Orientation & Access', text:'Supervisor intro meeting',          desc:'1-hour meeting with Khaled — role, expectations, and plan reviewed',                                           priority:'High',   assignedTo:'all'},
+  {id:'i3', group:'Orientation & Access', text:'MPS Division overview read',        desc:'Read and understood MPS Division overview document',                                                            priority:'High',   assignedTo:'all'},
+  {id:'i4', group:'Orientation & Access', text:'MyQ Training Portal activated',     desc:'Account created on MyQ official training portal and first module started',                                     priority:'High',   assignedTo:'all'},
+  {id:'i5', group:'Orientation & Access', text:'PaperCut Training Portal activated',desc:'Account created on PaperCut official training portal and first module started',                                priority:'High',   assignedTo:'all'},
   // Toshiba Hardware
-  {id:6,  title:'Toshiba product range studied',    desc:'e-STUDIO product catalog reviewed â can name key models and their use cases',                    group:'Toshiba Hardware',     priority:'High',   status:'not-started', visible:true},
-  {id:7,  title:'Hardware architecture understood', desc:'Internal components of Toshiba e-STUDIO devices understood â paper path, imaging unit, fuser',    group:'Toshiba Hardware',     priority:'High',   status:'not-started', visible:true},
-  {id:9,  title:'Device configured from scratch',   desc:'Set up a Toshiba device from factory defaults â network, scan, print, fax all configured',       group:'Toshiba Hardware',     priority:'High',   status:'not-started', visible:true},
-  {id:11, title:'Real customer SLA reviewed',       desc:'Reviewed at least one active customer SLA â understands response times and obligations',          group:'Toshiba Hardware',     priority:'High',   status:'not-started', visible:true},
+  {id:'i6', group:'Toshiba Hardware',     text:'TCE/Disty Access',                 desc:'Common Toshiba error codes reviewed — knows top 20 and their causes',                                          priority:'Medium', assignedTo:'all'},
+  {id:'i7', group:'Toshiba Hardware',     text:'Toshiba product range studied',     desc:'e-STUDIO product catalog reviewed — can name key models and their use cases',                                  priority:'High',   assignedTo:'all'},
+  {id:'i8', group:'Toshiba Hardware',     text:'Hardware architecture understood',  desc:'Scanner / Controller / Engine / Finisher — components identified and explained',                               priority:'High',   assignedTo:'all'},
+  {id:'i9', group:'Toshiba Hardware',     text:'Device configured from scratch',    desc:'Toshiba MFP set up independently: IP, network params, print, copy, scan all tested',                          priority:'High',   assignedTo:'all'},
+  {id:'i10',group:'Toshiba Hardware',     text:'Real customer SLA reviewed',        desc:'Read and understood at least one live ABM customer contract/SLA',                                              priority:'Medium', assignedTo:'all'},
   // Software Install
-  {id:12, title:'MyQ server installed',             desc:'MyQ print server installed and accessible on the network',                                        group:'Software Install',     priority:'High',   status:'not-started', visible:true},
-  {id:13, title:'Papercut server installed',        desc:'Papercut NG server installed, licensed, and accessible from client machines',                     group:'Software Install',     priority:'High',   status:'not-started', visible:true},
+  {id:'i11',group:'Software Install',     text:'MyQ Server installed',              desc:'MyQ Server installed with supervisor — Admin Panel accessible',                                                 priority:'High',   assignedTo:'all'},
+  {id:'i12',group:'Software Install',     text:'PaperCut installed & configured',   desc:'PaperCut MF server installed, initial setup complete, devices added',                                          priority:'High',   assignedTo:'all'},
   // Toshiba Deep Dive
-  {id:14, title:'Print driver installation',        desc:'Installed and configured PCL/PS drivers for at least 2 Toshiba models',                           group:'Toshiba Deep Dive',    priority:'High',   status:'not-started', visible:true},
-  {id:15, title:'Scanner configuration',            desc:'Configured scan-to-email and scan-to-folder on a test Toshiba device',                            group:'Toshiba Deep Dive',    priority:'High',   status:'not-started', visible:true},
-  {id:16, title:'Fax configuration',                desc:'Configured fax functionality and tested with a real fax send/receive',                            group:'Toshiba Deep Dive',    priority:'Medium', status:'not-started', visible:true},
-  {id:17, title:'Network printing setup',           desc:'Set up network printing from a Windows client to a Toshiba device',                               group:'Toshiba Deep Dive',    priority:'High',   status:'not-started', visible:true},
-  {id:18, title:'e-BRIDGE remote management',       desc:'Accessed e-BRIDGE cloud portal and successfully connected and monitored a device',                group:'Toshiba Deep Dive',    priority:'Medium', status:'not-started', visible:true},
+  {id:'i13',group:'Toshiba Deep Dive',    text:'Service manual navigation',         desc:'Can locate and navigate Toshiba service manuals for at least 2 device models',                                 priority:'Medium', assignedTo:'all'},
+  {id:'i14',group:'Toshiba Deep Dive',    text:'5 hardware faults simulated',       desc:'Simulated and documented 5 hardware error scenarios with root cause and fix',                                   priority:'High',   assignedTo:'all'},
+  {id:'i15',group:'Toshiba Deep Dive',    text:'Network troubleshooting on device', desc:'Resolved a simulated network connectivity issue on a Toshiba device independently',                            priority:'High',   assignedTo:'all'},
+  {id:'i16',group:'Toshiba Deep Dive',    text:'Fault log document created',        desc:'How to collect logs for Apps and Devices',                                                                      priority:'Medium', assignedTo:'all'},
   // MyQ Advanced
-  {id:19, title:'MyQ user management',              desc:'Created users, groups, and assigned printing policies in MyQ admin console',                      group:'MyQ Advanced',         priority:'High',   status:'not-started', visible:true},
-  {id:20, title:'Follow-me printing configured',    desc:'Set up and tested follow-me printing for at least 2 users on a Toshiba device',                  group:'MyQ Advanced',         priority:'High',   status:'not-started', visible:true},
-  {id:21, title:'MyQ reporting',                    desc:'Generated a usage/cost report and reviewed results with supervisor',                              group:'MyQ Advanced',         priority:'Medium', status:'not-started', visible:true},
-  {id:22, title:'Mobile printing setup',            desc:'Configured and tested mobile printing via MyQ mobile app on iOS or Android',                      group:'MyQ Advanced',         priority:'Medium', status:'not-started', visible:true},
+  {id:'i17',group:'MyQ Advanced',         text:'User authentication working',       desc:'Card reader / PIN / AD authentication all tested and working',                                                  priority:'High',   assignedTo:'all'},
+  {id:'i18',group:'MyQ Advanced',         text:'Print policies configured',         desc:'At least 3 print policies created: B&W only, duplex, page limits',                                             priority:'High',   assignedTo:'all'},
+  {id:'i19',group:'MyQ Advanced',         text:'Cost centres set up',               desc:'Department cost centres created, costs allocated and visible in reporting',                                     priority:'Medium', assignedTo:'all'},
+  {id:'i20',group:'MyQ Advanced',         text:'MyQ issue escalation',              desc:'3 escalation calls completed with support team',                                                                priority:'Medium', assignedTo:'all'},
+  {id:'i21',group:'MyQ Advanced',         text:'PaperCut issue escalation',         desc:'3 escalation calls completed with support team',                                                                priority:'High',   assignedTo:'all'},
 ];
-
-// âââ STATE ââââââââââââââââââââââââââââââââââââââââââ
-let items = [], filter = 'all', editingId = null;
-let assessScores = {assess1:0,assess2:0,assess3:0,assess4:0,assess5:0};
-let kpiValues = {kpi1:'',kpi2:'',kpi3:'',kpi4:''};
-let signoffDone = false, readinessChoice = '';
-
-function load(){
+ 
+let role=null,currentTrainee=null,items=[],trainees=[],progress={},signoffDone=false,signoffInfo={},saveTimer=null,assignItemId=null;
+ 
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ 
+async function fetchTraineesForLogin(){
   try{
-    const s = localStorage.getItem('mps-tracker-v1');
-    if(s){const d=JSON.parse(s);items=d.items||DEFAULT_ITEMS;assessScores=d.assessScores||assessScores;kpiValues=d.kpiValues||kpiValues;signoffDone=d.signoffDone||false;}
-    else items=JSON.parse(JSON.stringify(DEFAULT_ITEMS));
-  }catch(e){items=JSON.parse(JSON.stringify(DEFAULT_ITEMS));}
+    const r=await fetch(API_BASE+'/latest',{headers:{'X-Master-Key':MASTER_KEY}});
+    if(!r.ok)return[];
+    const d=await r.json();
+    return(d.record&&d.record.trainees)?d.record.trainees:[];
+  }catch(e){return[];}
 }
-function save(){
-  try{
-    const kpis={kpi1:document.getElementById('kpi1')?.value||'',kpi2:document.getElementById('kpi2')?.value||'',kpi3:document.getElementById('kpi3')?.value||'',kpi4:document.getElementById('kpi4')?.value||''};
-    localStorage.setItem('mps-tracker-v1',JSON.stringify({items,assessScores,kpiValues:kpis,signoffDone}));
-  }catch(e){}
-}
-
-// âââ STATS ââââââââââââââââââââââââââââââââââââââââââ
-function updateStats(){
-  const vis = items.filter(i=>i.visible);
-  const done = vis.filter(i=>i.status==='done').length;
-  const inp  = vis.filter(i=>i.status==='in-progress').length;
-  const blk  = vis.filter(i=>i.status==='blocked').length;
-  const ns   = vis.filter(i=>i.status==='not-started').length;
-  const total= vis.length;
-  document.getElementById('stat-visible').textContent=total;
-  document.getElementById('stat-done').textContent=done;
-  document.getElementById('stat-inprog').textContent=inp;
-  document.getElementById('stat-blocked').textContent=blk;
-  document.getElementById('stat-notstart').textContent=ns;
-  const pct = total>0?Math.round(done/total*100):0;
-  document.getElementById('main-progress').style.width=pct+'%';
-  document.getElementById('pct-label').textContent=pct+'%';
-  const w=(n)=>total>0?Math.round(n/total*100)+'%':'0%';
-  document.getElementById('bar-done').style.width=w(done);
-  document.getElementById('bar-inprog').style.width=w(inp);
-  document.getElementById('bar-blocked').style.width=w(blk);
-  document.getElementById('bar-notstart').style.width=w(ns);
-}
-
-// âââ TAB SWITCHING âââââââââââââââââââââââââââââââââââ
-function switchTab(t){
-  ['daily','manage','dashboard','signoff'].forEach(k=>{
-    document.getElementById('page-'+k).classList.toggle('hidden',k!==t);
-    document.getElementById('tab-'+k).classList.toggle('active',k===t);
-  });
-  if(t==='manage') renderManage();
-  if(t==='dashboard') renderDashboard();
-  if(t==='signoff') renderSignOff();
-}
-
-// âââ FILTER ââââââââââââââââââââââââââââââââââââââââ
-function setFilter(f,btn){
-  filter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDaily();
-}
-
-// âââ STATUS HELPERS ââââââââââââââââââââââââââââââââââ
-function statusLabel(s){return{done:'Done','in-progress':'In Progress','not-started':'Not Started',blocked:'Blocked'}[s]||s;}
-function priorityClass(p){return{'High':'priority-high','Medium':'priority-medium','Low':'priority-low'}[p]||'priority-medium';}
-function statusSelectClass(s){return{'done':'status-done','in-progress':'status-inprog','blocked':'status-blocked','not-started':'status-notstart'}[s]||'';}
-
-// âââ DAILY PLAN ââââââââââââââââââââââââââââââââââââââ
-function renderDaily(){
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const list = document.getElementById('daily-list');
-  let html = '';
-  GROUPS.forEach(g=>{
-    let its = items.filter(i=>{
-      if(filter==='hidden') return !i.visible && i.group===g;
-      if(!i.visible) return false;
-      if(filter!=='all' && i.status!==filter) return false;
-      if(q && !i.title.toLowerCase().includes(q) && !i.desc.toLowerCase().includes(q)) return false;
-      return i.group===g;
+ 
+function selectRole(r){
+  role=r;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('role-'+r).classList.add('selected');
+  document.getElementById('manager-fields').style.display=r==='manager'?'block':'none';
+  document.getElementById('trainee-fields').style.display=r==='trainee'?'block':'none';
+  document.getElementById('login-error').style.display='none';
+  if(r==='trainee'){
+    const sel=document.getElementById('trainee-sel');
+    sel.innerHTML='<option value="">Loading...</option>';
+    fetchTraineesForLogin().then(list=>{
+      if(list.length===0){sel.innerHTML='<option value="">No trainees added yet</option>';}
+      else{sel.innerHTML='<option value="">-- Select your name --</option>'+list.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');}
     });
-    if(!its.length) return;
-    const done = items.filter(i=>i.group===g&&i.visible&&i.status==='done').length;
-    const total = items.filter(i=>i.group===g&&i.visible).length;
-    const pct = total>0?Math.round(done/total*100):0;
-    html+=`<div class="group">
-      <div class="group-header" onclick="toggleGroup('g-${g.replace(/\W/g,'_')}')">
-        <h3>â¼ ${g}</h3>
-        <span class="group-count">${done}/${total}</span>
-        <div class="group-progress-mini"><div class="group-progress-fill" style="width:${pct}%"></div></div>
+  }
+}
+ 
+async function doLogin(){
+  if(!role){showErr('Please select a role.');return;}
+  if(role==='manager'){
+    if(document.getElementById('mgr-pass').value!==MANAGER_PASS){showErr('Incorrect password.');return;}
+    await startApp('manager',null);
+  }else{
+    const name=document.getElementById('trainee-sel').value;
+    if(!name){showErr('Please select your name.');return;}
+    await startApp('trainee',name);
+  }
+}
+function showErr(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
+ 
+async function startApp(r,trainee){
+  role=r;currentTrainee=trainee;
+  try{
+    const res=await fetch(API_BASE+'/latest',{headers:{'X-Master-Key':MASTER_KEY}});
+    const data=await res.json();const rec=data.record||{};
+    trainees=rec.trainees||[];
+    progress=rec.progress||{};
+    signoffDone=rec.signoffDone||false;
+    signoffInfo=rec.signoffInfo||{};
+
+    // Version check: if data is old (no version or version < 3), reset items to new MPS defaults
+    if(!rec.version||rec.version<3){
+      items=JSON.parse(JSON.stringify(DEFAULT_ITEMS));
+      // Immediately push updated items+version to JSONBin so all users see them
+      await fetch(API_BASE,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY},
+        body:JSON.stringify({version:3,items,trainees,progress,signoffDone,signoffInfo})});
+    }else{
+      // Patch any stored items that might be missing new fields
+      items=(rec.items||JSON.parse(JSON.stringify(DEFAULT_ITEMS))).map(it=>({
+        priority: 'High',
+        desc: '',
+        assignedTo: 'all',
+        ...it
+      }));
+    }
+  }catch(e){items=JSON.parse(JSON.stringify(DEFAULT_ITEMS));trainees=[];progress={};}
+  if(role==='trainee'&&currentTrainee&&!progress[currentTrainee])
+    progress[currentTrainee]={statuses:{},kpiValues:{},assessScores:{}};
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  document.getElementById('user-badge').textContent=role==='manager'?'👔 Manager':'🎓 '+currentTrainee;
+  buildTabs();showTab(role==='manager'?'dashboard':'plan');
+}
+ 
+const MGR_TABS=[{id:'dashboard',label:'📊 Dashboard'},{id:'plan',label:'📋 Daily Plan'},{id:'trainees',label:'👥 Trainees'},{id:'items',label:'⚙️ Items'},{id:'signoff',label:'✅ Sign-Off'}];
+const TRN_TABS=[{id:'plan',label:'📋 My Plan'},{id:'mydash',label:'📊 My Progress'}];
+ 
+function buildTabs(){
+  const tabs=role==='manager'?MGR_TABS:TRN_TABS;
+  document.getElementById('tabs-bar').innerHTML=tabs.map(t=>`<button class="tab-btn" id="tab-${t.id}" onclick="showTab('${t.id}')">${t.label}</button>`).join('');
+  document.getElementById('panels-container').innerHTML=tabs.map(t=>`<div class="tab-panel" id="panel-${t.id}"></div>`).join('');
+}
+ 
+function showTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  const btn=document.getElementById('tab-'+id),panel=document.getElementById('panel-'+id);
+  if(btn)btn.classList.add('active');
+  if(panel){panel.classList.add('active');renderPanel(id);}
+}
+ 
+function renderPanel(id){
+  if(id==='dashboard')renderDash();
+  else if(id==='plan')renderPlan();
+  else if(id==='trainees')renderTrainees();
+  else if(id==='items')renderItems();
+  else if(id==='signoff')renderSignoff();
+  else if(id==='mydash')renderMyDash();
+}
+ 
+// ── DASHBOARD ────────────────────────────────────────────────────────────────
+function renderDash(){
+  const el=document.getElementById('panel-dashboard');
+  if(trainees.length===0){
+    el.innerHTML=`<div class="empty"><div class="icon">👥</div><div style="font-size:16px;font-weight:600;margin-bottom:8px">No trainees yet</div><div>Go to the <strong>Trainees</strong> tab to add names first.</div></div>`;
+    return;
+  }
+  const rows=trainees.map(name=>{
+    const p=progress[name]||{statuses:{},kpiValues:{},assessScores:{}};
+    const asgn=items.filter(it=>isAsgn(it,name));
+    const tot=asgn.length,done=asgn.filter(it=>p.statuses[it.id]==='complete').length,inp=asgn.filter(it=>p.statuses[it.id]==='in-progress').length;
+    const pct=tot>0?Math.round(done/tot*100):0;
+    const sc=Object.values(p.assessScores||{}).filter(s=>s>0);
+    const avgSc=sc.length>0?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+    const kv=Object.values(p.kpiValues||{}).map(Number).filter(v=>!isNaN(v)&&v>0);
+    const avgKpi=kv.length>0?Math.round(kv.reduce((a,b)=>a+b,0)/kv.length)+'%':'—';
+    return{name,tot,done,inp,pct,avgSc,avgKpi,p,asgn};
+  });
+  const ovAvg=Math.round(rows.reduce((a,r)=>a+r.pct,0)/rows.length);
+  el.innerHTML=`
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">${trainees.length}</div><div class="stat-lbl">Trainees</div></div>
+      <div class="stat-card"><div class="stat-num">${items.length}</div><div class="stat-lbl">Training Items</div></div>
+      <div class="stat-card"><div class="stat-num">${ovAvg}%</div><div class="stat-lbl">Avg Completion</div></div>
+      <div class="stat-card"><div class="stat-num">${rows.filter(r=>r.pct===100).length}</div><div class="stat-lbl">Fully Complete</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Trainee Progress Overview</div>
+      <div style="overflow-x:auto">
+        <table class="tp-table">
+          <thead><tr><th>Trainee</th><th>Assigned</th><th>Completed</th><th>In Progress</th><th>Completion</th><th>Avg KPI</th><th>Avg Score</th></tr></thead>
+          <tbody>${rows.map(r=>`<tr>
+            <td><strong>${esc(r.name)}</strong></td>
+            <td>${r.tot}</td>
+            <td><span class="badge b-ok">${r.done}</span></td>
+            <td><span class="badge b-ip">${r.inp}</span></td>
+            <td><div style="display:flex;align-items:center;gap:8px;min-width:130px">
+              <div class="pbar" style="flex:1"><div class="pfill" style="width:${r.pct}%"></div></div>
+              <span style="font-size:13px;font-weight:700;color:var(--primary)">${r.pct}%</span>
+            </div></td>
+            <td>${r.avgKpi}</td><td>${r.avgSc}</td>
+          </tr>`).join('')}</tbody>
+        </table>
       </div>
-      <div id="g-${g.replace(/\W/g,'_')}">`;
-    its.forEach(item=>{
-      const ck = item.status==='done'?'done-check':item.status==='in-progress'?'inprog-check':item.status==='blocked'?'blocked-check':'';
-      const tick = item.status==='done'?'â':'';
-      html+=`<div class="item-row">
-        <div class="item-num">${item.id}</div>
-        <div class="item-check ${ck}" onclick="cycleStatus(${item.id})">${tick}</div>
-        <div class="item-body">
-          <div class="item-title" style="${item.status==='done'?'text-decoration:line-through;color:#9aa5b1':''}">${item.title}</div>
-          <div class="item-desc">${item.desc}</div>
-        </div>
-        <div class="item-actions">
-          <span class="priority-badge ${priorityClass(item.priority)}">${item.priority}</span>
-          <select class="status-select ${statusSelectClass(item.status)}" onchange="setStatus(${item.id},this.value)">
-            <option value="not-started" ${item.status==='not-started'?'selected':''}>Not Started</option>
-            <option value="in-progress" ${item.status==='in-progress'?'selected':''}>In Progress</option>
-            <option value="done" ${item.status==='done'?'selected':''}>Done</option>
-            <option value="blocked" ${item.status==='blocked'?'selected':''}>Blocked</option>
-          </select>
-          <button class="status-btn" onclick="toggleHide(${item.id})">${item.visible?'Hide':'Show'}</button>
-        </div>
-      </div>`;
-    });
-    html+='</div></div>';
-  });
-  if(!html) html='<div style="text-align:center;padding:48px;color:#9aa5b1;font-size:15px">No items match your filter.</div>';
-  list.innerHTML=html;
+    </div>
+    ${rows.map(r=>trCard(r)).join('')}`;
 }
-
-function toggleGroup(id){
-  const el=document.getElementById(id); if(!el) return;
-  el.classList.toggle('hidden');
+ 
+function trCard(r){
+  const{name,p,asgn}=r;
+  return`<div class="card">
+    <div class="card-header">🎓 ${esc(name)} — Detailed View
+      <span style="font-size:13px;font-weight:400;color:var(--muted)">${r.pct}% complete</span>
+    </div>
+    <div class="card-body">
+      ${asgn.length===0?'<div style="color:var(--muted);font-size:14px">No items assigned.</div>':`
+      <div style="overflow-x:auto"><table class="items-table">
+        <thead><tr><th>Item</th><th>Group</th><th>Priority</th><th>Status</th><th>Score</th></tr></thead>
+        <tbody>${asgn.map(it=>{
+          const st=p.statuses[it.id]||'not-started',sc=(p.assessScores||{})[it.id]||0;
+          const bc=st==='complete'?'b-ok':st==='in-progress'?'b-ip':'b-ns';
+          const bl=st==='complete'?'✓ Complete':st==='in-progress'?'⟳ In Progress':'○ Not Started';
+          const pr=it.priority||'';
+          const pc=pr==='High'?'b-hi':pr==='Medium'?'b-med':'b-ns';
+          return`<tr>
+            <td><div class="item-text">${esc(it.text)}</div>${it.desc?`<div class="item-desc">${esc(it.desc)}</div>`:''}</td>
+            <td style="color:var(--muted);font-size:12px">${esc(it.group)}</td>
+            <td>${pr?`<span class="badge ${pc}">${pr}</span>`:''}</td>
+            <td><span class="badge ${bc}">${bl}</span></td>
+            <td style="font-weight:600">${sc>0?sc+'/5':'—'}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>
+      <div style="margin-top:16px">
+        <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px">KPI VALUES</div>
+        <div class="kpi-grid">${KPI_DEFS.map(k=>`<div class="kpi-item">
+          <div class="kpi-lbl">${k.label}</div>
+          <div style="font-size:18px;font-weight:700;color:var(--primary)">${(p.kpiValues||{})[k.key]||'—'}</div>
+        </div>`).join('')}</div>
+      </div>`}
+    </div>
+  </div>`;
 }
-
-function cycleStatus(id){
-  const item=items.find(i=>i.id===id); if(!item) return;
-  const order=['not-started','in-progress','done','blocked'];
-  const idx=order.indexOf(item.status);
-  item.status=order[(idx+1)%order.length];
-  updateStats(); renderDaily(); save();
-}
-
-function setStatus(id,val){
-  const item=items.find(i=>i.id===id); if(!item) return;
-  item.status=val; updateStats(); renderDaily(); save();
-}
-
-function toggleHide(id){
-  const item=items.find(i=>i.id===id); if(!item) return;
-  item.visible=!item.visible; updateStats(); renderDaily(); save();
-}
-
-// âââ MANAGE ITEMS ââââââââââââââââââââââââââââââââââââ
-function renderManage(){
-  const list=document.getElementById('manage-list');
-  let html='';
-  items.forEach(item=>{
-    html+=`<div class="table-row">
-      <div style="color:#9aa5b1;font-weight:700">${item.id}</div>
-      <div style="font-weight:600;color:#1a2a3a;font-size:13px">${item.title}</div>
-      <div class="topic-cell"><span class="topic-chip">${item.group}</span></div>
-      <div><span class="priority-badge ${priorityClass(item.priority)}">${item.priority}</span></div>
-      <div><select class="status-select ${statusSelectClass(item.status)}" onchange="setStatusManage(${item.id},this.value)">
-        <option value="not-started" ${item.status==='not-started'?'selected':''}>Not Started</option>
-        <option value="in-progress" ${item.status==='in-progress'?'selected':''}>In Progress</option>
-        <option value="done" ${item.status==='done'?'selected':''}>Done</option>
-        <option value="blocked" ${item.status==='blocked'?'selected':''}>Blocked</option>
+ 
+// ── DAILY PLAN ───────────────────────────────────────────────────────────────
+function renderPlan(){
+  const el=document.getElementById('panel-plan');
+  if(role==='manager'){
+    if(trainees.length===0){el.innerHTML=`<div class="empty"><div class="icon">👥</div><div>Add trainees first in the <strong>Trainees</strong> tab.</div></div>`;return;}
+    const sel=el.dataset.sel||trainees[0];
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <label style="font-weight:600;font-size:14px">View Trainee:</label>
+      <select id="plan-sel" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none" onchange="chgPlan(this.value)">
+        ${trainees.map(n=>`<option value="${esc(n)}" ${n===sel?'selected':''}>${esc(n)}</option>`).join('')}
       </select></div>
-      <div class="visible-cell"><span class="visible-badge ${item.visible?'v-yes':'v-no'}">${item.visible?'Visible':'Hidden'}</span></div>
-      <div class="action-cell"><div class="action-btns">
-        <button class="act-btn" onclick="toggleHide(${item.id});renderManage()">Hide</button>
-        <button class="act-btn" onclick="openEditModal(${item.id})">Edit</button>
-        <button class="act-btn del" onclick="deleteItem(${item.id})">Del</button>
-      </div></div>
-    </div>`;
-  });
-  list.innerHTML=html;
-}
-
-function setStatusManage(id,val){setStatus(id,val);renderManage();}
-
-function showAllHidden(){items.forEach(i=>i.visible=true);updateStats();renderManage();renderDaily();save();}
-function hideAll(){items.forEach(i=>i.visible=false);updateStats();renderManage();renderDaily();save();}
-function resetStatuses(){items.forEach(i=>i.status='not-started');updateStats();renderManage();renderDaily();save();}
-function deleteItem(id){if(!confirm('Delete this item?')) return; items=items.filter(i=>i.id!==id);updateStats();renderManage();renderDaily();save();}
-
-// âââ MODAL âââââââââââââââââââââââââââââââââââââââââââ
-function openAddModal(){
-  editingId=null;
-  document.getElementById('modal-title').textContent='Add New Item';
-  document.getElementById('m-title').value='';
-  document.getElementById('m-desc').value='';
-  document.getElementById('m-group').value='Orientation & Access';
-  document.getElementById('m-priority').value='High';
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-function openEditModal(id){
-  const item=items.find(i=>i.id===id); if(!item) return;
-  editingId=id;
-  document.getElementById('modal-title').textContent='Edit Item';
-  document.getElementById('m-title').value=item.title;
-  document.getElementById('m-desc').value=item.desc;
-  document.getElementById('m-group').value=item.group;
-  document.getElementById('m-priority').value=item.priority;
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-function closeModal(e){
-  if(!e||e.target===document.getElementById('modal-overlay'))
-    document.getElementById('modal-overlay').classList.add('hidden');
-}
-function saveItem(){
-  const title=document.getElementById('m-title').value.trim();
-  if(!title){alert('Please enter a title.');return;}
-  if(editingId){
-    const item=items.find(i=>i.id===editingId);
-    if(item){item.title=title;item.desc=document.getElementById('m-desc').value.trim();item.group=document.getElementById('m-group').value;item.priority=document.getElementById('m-priority').value;}
-  } else {
-    const maxId=items.reduce((m,i)=>Math.max(m,i.id),0);
-    items.push({id:maxId+1,title,desc:document.getElementById('m-desc').value.trim(),group:document.getElementById('m-group').value,priority:document.getElementById('m-priority').value,status:'not-started',visible:true});
+      <div id="plan-wrap"></div>`;
+    el.dataset.sel=sel;planItems(sel,'plan-wrap',false);
+  }else{
+    el.innerHTML=`<div id="plan-wrap"></div>`;
+    planItems(currentTrainee,'plan-wrap',true);
   }
-  closeModal();updateStats();renderManage();renderDaily();save();
 }
-
-// âââ DASHBOARD âââââââââââââââââââââââââââââââââââââââ
-function renderDashboard(){
-  // Group progress
-  let gpHtml='';
-  GROUPS.forEach(g=>{
-    const its=items.filter(i=>i.group===g&&i.visible);
-    const done=its.filter(i=>i.status==='done').length;
-    const total=its.length;
-    const pct=total>0?Math.round(done/total*100):0;
-    gpHtml+=`<div class="group-progress-row">
-      <div class="group-name">${g}</div>
-      <div class="gp-bar-wrap"><div class="gp-bar-fill" style="width:${pct}%"></div></div>
-      <div class="gp-count">${done}/${total}</div>
+ 
+function chgPlan(name){document.getElementById('panel-plan').dataset.sel=name;planItems(name,'plan-wrap',false);}
+ 
+function planItems(tname,wid,editable){
+  const el=document.getElementById(wid);
+  if(!tname){el.innerHTML='<div class="empty"><div>No trainee selected.</div></div>';return;}
+  const p=progress[tname]||{statuses:{},kpiValues:{},assessScores:{}};
+  const myItems=items.filter(it=>isAsgn(it,tname));
+  if(myItems.length===0){el.innerHTML='<div class="empty"><div class="icon">📋</div><div>No items assigned to this trainee.</div></div>';return;}
+  const groups=[...new Set(myItems.map(it=>it.group))];
+  el.innerHTML=groups.map(group=>{
+    const gi=myItems.filter(it=>it.group===group);
+    const done=gi.filter(it=>p.statuses[it.id]==='complete').length;
+    return`<div class="card"><div class="card-header">${esc(group)}
+      <span style="font-size:13px;font-weight:400;color:var(--muted)">${done}/${gi.length} complete</span>
+    </div>
+    <div style="overflow-x:auto"><table class="items-table">
+      <thead><tr><th>Training Item</th><th style="width:70px">Priority</th><th style="width:160px">Status</th><th style="width:165px">Assessment Score</th></tr></thead>
+      <tbody>${gi.map(it=>{
+        const st=p.statuses[it.id]||'not-started',sc=(p.assessScores||{})[it.id]||0;
+        const bc=st==='complete'?'b-ok':st==='in-progress'?'b-ip':'b-ns';
+        const bl=st==='complete'?'✓ Complete':st==='in-progress'?'⟳ In Progress':'○ Not Started';
+        const pr=it.priority||'';
+        const pc=pr==='High'?'b-hi':pr==='Medium'?'b-med':'b-ns';
+        const stEl=editable
+          ?`<select class="status-select" onchange="updSt('${esc(tname)}','${it.id}',this.value)">
+              <option value="not-started" ${st==='not-started'?'selected':''}>○ Not Started</option>
+              <option value="in-progress" ${st==='in-progress'?'selected':''}>⟳ In Progress</option>
+              <option value="complete" ${st==='complete'?'selected':''}>✓ Complete</option>
+            </select>`
+          :`<span class="badge ${bc}">${bl}</span>`;
+        const scEl=editable
+          ?`<div class="score-btns">${[1,2,3,4,5].map(n=>`<button class="sbtn ${sc===n?'active':''}" onclick="updSc('${esc(tname)}','${it.id}',${n})">${n}</button>`).join('')}</div>`
+          :`<span style="font-weight:600">${sc>0?sc+'/5':'—'}</span>`;
+        return`<tr>
+          <td>
+            <div class="item-text">${esc(it.text)}</div>
+            ${it.desc?`<div class="item-desc">${esc(it.desc)}</div>`:''}
+          </td>
+          <td>${pr?`<span class="badge ${pc}">${pr}</span>`:''}</td>
+          <td>${stEl}</td>
+          <td>${scEl}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div></div>`;
+  }).join('');
+}
+ 
+// ── TRAINEES ─────────────────────────────────────────────────────────────────
+function renderTrainees(){
+  const el=document.getElementById('panel-trainees');
+  el.innerHTML=`<div class="card"><div class="card-header">👥 Manage Trainees</div><div class="card-body">
+    <div class="frow">
+      <input type="text" id="new-tr" placeholder="Trainee full name" onkeydown="if(event.key==='Enter')addTr()">
+      <button class="btn btn-p" onclick="addTr()">+ Add Trainee</button>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">ℹ️ New trainees are automatically assigned to all training items.</div>
+    ${trainees.length===0
+      ?'<div class="empty" style="padding:24px"><div>No trainees yet. Add a name above.</div></div>'
+      :`<div style="overflow-x:auto"><table class="items-table">
+        <thead><tr><th>#</th><th>Name</th><th>Items Assigned</th><th>Progress</th><th></th></tr></thead>
+        <tbody>${trainees.map((name,i)=>{
+          const p=progress[name]||{statuses:{}};
+          const asgn=items.filter(it=>isAsgn(it,name));
+          const done=asgn.filter(it=>p.statuses[it.id]==='complete').length;
+          const pct=asgn.length>0?Math.round(done/asgn.length*100):0;
+          return`<tr>
+            <td style="color:var(--muted)">${i+1}</td>
+            <td><strong>${esc(name)}</strong></td>
+            <td>${asgn.length}</td>
+            <td><div style="display:flex;align-items:center;gap:8px;min-width:120px">
+              <div class="pbar" style="flex:1"><div class="pfill" style="width:${pct}%"></div></div>
+              <span style="font-size:12px;font-weight:600">${pct}%</span>
+            </div></td>
+            <td><button class="btn btn-d btn-sm" onclick="rmTr('${esc(name)}')">Remove</button></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>`}
+  </div></div>`;
+}
+ 
+function addTr(){
+  const inp=document.getElementById('new-tr'),name=inp.value.trim();
+  if(!name)return;
+  if(trainees.includes(name)){alert('A trainee with this name already exists.');return;}
+  trainees.push(name);
+  if(!progress[name])progress[name]={statuses:{},kpiValues:{},assessScores:{}};
+  // Auto-assign new trainee to ALL items (including those with specific assignments)
+  items.forEach(it=>{
+    if(Array.isArray(it.assignedTo)&&!it.assignedTo.includes(name)){
+      it.assignedTo.push(name);
+    }
+  });
+  inp.value='';scheduleSave();renderTrainees();
+}
+ 
+function rmTr(name){
+  if(!confirm(`Remove "${name}" from the list?\nProgress data will be kept.`))return;
+  trainees=trainees.filter(t=>t!==name);scheduleSave();renderTrainees();
+}
+ 
+// ── ITEMS ────────────────────────────────────────────────────────────────────
+function renderItems(){
+  const el=document.getElementById('panel-items');
+  const groups=[...new Set(items.map(it=>it.group))];
+  el.innerHTML=`<div class="card" style="margin-bottom:16px"><div class="card-header">Add New Item</div><div class="card-body">
+    <div class="frow">
+      <input type="text" id="new-itxt" placeholder="Item title" style="flex:2">
+      <select id="new-igrp">
+        ${groups.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('')}
+        <option value="__new__">+ New Group…</option>
+      </select>
+      <select id="new-ipri"><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select>
+      <button class="btn btn-p" onclick="addIt()">Add</button>
+    </div>
+    <div style="margin-bottom:8px">
+      <input type="text" id="new-idesc" placeholder="Success criteria / description (optional)"
+        style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;color:var(--muted)">
+    </div>
+    <div id="new-grp-row" style="display:none;margin-top:4px">
+      <input type="text" id="new-grp-name" placeholder="New group name"
+        style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;width:280px;outline:none">
+    </div>
+  </div></div>
+  ${groups.map(group=>{
+    const gi=items.filter(it=>it.group===group);
+    return`<div class="card" style="margin-bottom:16px">
+      <div class="card-header">${esc(group)}<span style="font-size:13px;font-weight:400;color:var(--muted)">(${gi.length})</span></div>
+      <div style="overflow-x:auto"><table class="items-table">
+        <thead><tr><th>Item</th><th style="width:75px">Priority</th><th>Assigned To</th><th style="width:100px">Actions</th></tr></thead>
+        <tbody>${gi.map(it=>{
+          const pr=it.priority||'';
+          const pc=pr==='High'?'b-hi':pr==='Medium'?'b-med':'b-ns';
+          const al=it.assignedTo==='all'
+            ?'<span class="badge b-ok">All Trainees</span>'
+            :(Array.isArray(it.assignedTo)&&it.assignedTo.length>0)
+              ?`<span class="badge b-ip">${it.assignedTo.map(n=>esc(n)).join(', ')}</span>`
+              :'<span class="badge b-ns">None assigned</span>';
+          return`<tr>
+            <td>
+              <div class="item-text">${esc(it.text)}</div>
+              ${it.desc?`<div class="item-desc">${esc(it.desc)}</div>`:''}
+            </td>
+            <td>${pr?`<span class="badge ${pc}">${pr}</span>`:''}</td>
+            <td>${al} <button class="btn btn-b btn-sm" style="margin-left:6px" onclick="openModal('${it.id}')">✏️ Assign</button></td>
+            <td><button class="btn btn-d btn-sm" onclick="rmIt('${it.id}')">Remove</button></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>
     </div>`;
-  });
-  document.getElementById('group-progress-chart').innerHTML=gpHtml;
-
-  // Donut
-  const vis=items.filter(i=>i.visible);
-  const stats={done:0,'in-progress':0,blocked:0,'not-started':0};
-  vis.forEach(i=>stats[i.status]=(stats[i.status]||0)+1);
-  const total=vis.length||1;
-  const colors={done:'#4caf50','in-progress':'#ff9800',blocked:'#f44336','not-started':'#cfd8dc'};
-  const labels={done:'Done','in-progress':'In Progress',blocked:'Blocked','not-started':'Not Started'};
-  let offset=0, paths='';
-  const cx=50,cy=50,r=35,sw=18;
-  const circ=2*Math.PI*r;
-  ['done','in-progress','blocked','not-started'].forEach(k=>{
-    const pct=stats[k]/total;
-    const dash=pct*circ;
-    paths+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[k]}" stroke-width="${sw}" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-offset*circ}" transform="rotate(-90,${cx},${cy})"/>`;
-    offset+=pct;
-  });
-  const pctDone=Math.round(stats.done/total*100);
-  document.getElementById('donut-svg').innerHTML=paths+`<text x="50" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="#1a2a3a">${pctDone}%</text><text x="50" y="58" text-anchor="middle" font-size="8" fill="#6b7a8d">done</text>`;
-  let legendHtml='';
-  ['done','in-progress','blocked','not-started'].forEach(k=>{
-    legendHtml+=`<div class="legend-item"><div class="legend-dot" style="background:${colors[k]}"></div>${labels[k]} â ${stats[k]}</div>`;
-  });
-  document.getElementById('donut-legend').innerHTML=legendHtml;
-
-  // KPIs
-  ['kpi1','kpi2','kpi3','kpi4'].forEach(k=>{
-    const el=document.getElementById(k); if(el&&kpiValues[k]) el.value=kpiValues[k];
-    if(el) el.oninput=()=>{kpiValues[k]=el.value;save();};
-  });
-
-  // Assessment scores
-  document.querySelectorAll('.score-btns').forEach(wrap=>{
-    const key=wrap.dataset.key;
-    let html='';
-    for(let i=1;i<=5;i++) html+=`<button class="score-btn ${assessScores[key]===i?'selected':''}" onclick="setScore('${key}',${i})">${i}</button>`;
-    wrap.innerHTML=html;
+  }).join('')}`;
+ 
+  document.getElementById('new-igrp').addEventListener('change',function(){
+    document.getElementById('new-grp-row').style.display=this.value==='__new__'?'block':'none';
   });
 }
-
-function setScore(key,val){
-  assessScores[key]=val;
-  document.querySelectorAll(`[data-key="${key}"] .score-btn`).forEach((b,i)=>b.classList.toggle('selected',i+1===val));
-  save();
+ 
+function addIt(){
+  const text=document.getElementById('new-itxt').value.trim();
+  const desc=document.getElementById('new-idesc').value.trim();
+  const priority=document.getElementById('new-ipri').value;
+  const gs=document.getElementById('new-igrp').value;
+  let group=gs;
+  if(gs==='__new__'){group=document.getElementById('new-grp-name').value.trim();if(!group){alert('Enter group name.');return;}}
+  if(!text){alert('Enter item title.');return;}
+  items.push({id:'i'+Date.now(),group,text,desc,priority,assignedTo:'all'});
+  scheduleSave();renderItems();
 }
-
-// âââ SIGN-OFF ââââââââââââââââââââââââââââââââââââââââ
-let readinessSet='';
-function setReady(choice,el){
-  readinessSet=choice;
-  document.querySelectorAll('.ready-opt').forEach(o=>o.classList.remove('active-ready','active-notready'));
-  el.classList.add(choice==='ready'?'active-ready':'active-notready');
+ 
+function rmIt(id){if(!confirm('Remove this training item?'))return;items=items.filter(it=>it.id!==id);scheduleSave();renderItems();}
+ 
+// ── ASSIGN MODAL ─────────────────────────────────────────────────────────────
+function openModal(itemId){
+  assignItemId=itemId;
+  const item=items.find(it=>it.id===itemId);
+  if(!item)return;
+  const short=item.text.length>50?item.text.substring(0,50)+'…':item.text;
+  document.getElementById('assign-title').textContent='Assign: '+short;
+  const allChk=document.getElementById('assign-all-chk');
+  allChk.checked=(item.assignedTo==='all');
+  const list=document.getElementById('assign-list');
+  if(trainees.length===0){
+    list.innerHTML='<div style="color:var(--muted);font-size:14px;padding:8px">No trainees added yet. Add trainees first in the Trainees tab.</div>';
+  }else{
+    list.innerHTML=trainees.map(name=>{
+      const chkd=item.assignedTo==='all'||(Array.isArray(item.assignedTo)&&item.assignedTo.includes(name));
+      return`<label class="chk-item">
+        <input type="checkbox" class="tasgn" value="${esc(name)}" ${chkd?'checked':''}>
+        <span>${esc(name)}</span>
+      </label>`;
+    }).join('');
+  }
+  refreshModalState();
+  document.getElementById('assign-modal').classList.add('open');
 }
-function renderSignOff(){
+ 
+function refreshModalState(){
+  const allChecked=document.getElementById('assign-all-chk').checked;
+  const listDiv=document.getElementById('assign-list');
+  listDiv.style.opacity=allChecked?'0.4':'1';
+  listDiv.style.pointerEvents=allChecked?'none':'auto';
+  document.getElementById('modal-specific-label').style.color=allChecked?'#d1d5db':'var(--muted)';
+}
+ 
+function toggleAssignAll(){
+  const allChecked=document.getElementById('assign-all-chk').checked;
+  if(allChecked)document.querySelectorAll('.tasgn').forEach(c=>c.checked=true);
+  refreshModalState();
+}
+ 
+function closeModal(){document.getElementById('assign-modal').classList.remove('open');assignItemId=null;}
+ 
+function saveAssign(){
+  const item=items.find(it=>it.id===assignItemId);
+  if(!item)return;
+  if(document.getElementById('assign-all-chk').checked){
+    item.assignedTo='all';
+  }else{
+    item.assignedTo=[...document.querySelectorAll('.tasgn:checked')].map(c=>c.value);
+  }
+  scheduleSave();closeModal();renderItems();
+}
+ 
+// ── MY DASHBOARD (Trainee) ───────────────────────────────────────────────────
+function renderMyDash(){
+  const el=document.getElementById('panel-mydash');
+  const p=progress[currentTrainee]||{statuses:{},kpiValues:{},assessScores:{}};
+  const myItems=items.filter(it=>isAsgn(it,currentTrainee));
+  const tot=myItems.length,done=myItems.filter(it=>p.statuses[it.id]==='complete').length,inp=myItems.filter(it=>p.statuses[it.id]==='in-progress').length;
+  const pct=tot>0?Math.round(done/tot*100):0;
+  el.innerHTML=`
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">${tot}</div><div class="stat-lbl">Assigned Items</div></div>
+      <div class="stat-card"><div class="stat-num">${done}</div><div class="stat-lbl">Completed</div></div>
+      <div class="stat-card"><div class="stat-num">${inp}</div><div class="stat-lbl">In Progress</div></div>
+      <div class="stat-card"><div class="stat-num">${pct}%</div><div class="stat-lbl">Overall Progress</div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="card-header">Overall Completion</div><div class="card-body">
+      <div class="pbar" style="height:16px;margin-bottom:8px"><div class="pfill" style="width:${pct}%"></div></div>
+      <div style="text-align:right;font-size:13px;font-weight:700;color:var(--primary)">${pct}%</div>
+    </div></div>
+    <div class="card"><div class="card-header">My KPI Values</div><div class="card-body">
+      <div class="kpi-grid">${KPI_DEFS.map(k=>`<div class="kpi-item">
+        <div class="kpi-lbl">${k.label}</div>
+        <input type="number" class="kpi-inp" min="0" max="100" placeholder="0"
+          value="${(p.kpiValues||{})[k.key]||''}"
+          onchange="updKpi('${esc(currentTrainee)}','${k.key}',this.value)">
+      </div>`).join('')}</div>
+    </div></div>`;
+}
+ 
+// ── SIGN-OFF ──────────────────────────────────────────────────────────────────
+function renderSignoff(){
+  const el=document.getElementById('panel-signoff');
+  const allDone=trainees.length>0&&trainees.every(name=>{
+    const p=progress[name]||{statuses:{}};
+    const asgn=items.filter(it=>isAsgn(it,name));
+    return asgn.length>0&&asgn.every(it=>p.statuses[it.id]==='complete');
+  });
   if(signoffDone){
-    document.getElementById('signoff-form').classList.add('hidden');
-    document.getElementById('signoff-done').classList.remove('hidden');
+    el.innerHTML=`<div class="signoff-done">
+      <div style="font-size:24px;margin-bottom:8px">✅ Training Complete!</div>
+      <div style="font-size:15px;color:#065f46;margin-bottom:16px">All trainees have completed the training program.</div>
+      <div style="font-size:14px">Signed off by: <strong>${esc(signoffInfo.name||'Manager')}</strong></div>
+      <div style="font-size:14px">Date: <strong>${esc(signoffInfo.date||'—')}</strong></div>
+      ${signoffInfo.notes?`<div style="font-size:14px;margin-top:8px">Notes: <strong>${esc(signoffInfo.notes)}</strong></div>`:''}
+      <button class="btn btn-d" style="margin-top:20px" onclick="resetSO()">Reset Sign-Off</button>
+    </div>`;
+  }else{
+    el.innerHTML=`<div class="signoff-box">
+      <div style="font-size:18px;font-weight:700;margin-bottom:16px">📝 Training Sign-Off</div>
+      ${!allDone?`<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:12px;margin-bottom:16px;font-size:14px">
+        ⚠️ Not all trainees have completed all their assigned items yet.</div>`:''}
+      <div style="margin-bottom:12px"><label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Manager Name</label>
+        <input type="text" id="so-name" placeholder="Your name"
+          style="padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;width:100%;max-width:300px;outline:none">
+      </div>
+      <div style="margin-bottom:20px"><label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Notes (optional)</label>
+        <textarea id="so-notes" rows="3" placeholder="Any notes..."
+          style="padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;width:100%;max-width:500px;outline:none;resize:vertical"></textarea>
+      </div>
+      <button class="btn btn-p" style="padding:12px 28px;font-size:15px" onclick="doSO()">✅ Sign Off Training</button>
+    </div>`;
   }
 }
-function submitSignOff(){
+ 
+function doSO(){
   const name=document.getElementById('so-name').value.trim();
-  if(!name){alert('Please enter the trainee name.');return;}
-  if(!readinessSet){alert('Please select readiness status.');return;}
-  const summary=document.getElementById('so-summary').value;
-  document.getElementById('so-summary-display').textContent=`Signed off by ${name} on ${document.getElementById('so-date').value||new Date().toLocaleDateString()}. ${readinessSet==='ready'?'Trainee is ready for Week 2.':'Additional time requested before Week 2.'}`;
+  if(!name){alert('Enter your name to sign off.');return;}
+  if(!confirm('Sign off the training program for all trainees?'))return;
   signoffDone=true;
-  document.getElementById('signoff-form').classList.add('hidden');
-  document.getElementById('signoff-done').classList.remove('hidden');
-  save();
+  signoffInfo={name,date:new Date().toLocaleDateString(),notes:document.getElementById('so-notes').value.trim()};
+  scheduleSave();renderSignoff();
 }
-
-// âââ INIT ââââââââââââââââââââââââââââââââââââââââââââ
-load();
-updateStats();
-renderDaily();
+function resetSO(){if(!confirm('Reset the sign-off?'))return;signoffDone=false;signoffInfo={};scheduleSave();renderSignoff();}
+ 
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function isAsgn(item,name){
+  if(item.assignedTo==='all')return true;
+  if(Array.isArray(item.assignedTo))return item.assignedTo.includes(name);
+  return false;
+}
+function ensurePr(name){if(!progress[name])progress[name]={statuses:{},kpiValues:{},assessScores:{}};}
+function updSt(tname,itemId,val){ensurePr(tname);progress[tname].statuses[itemId]=val;scheduleSave();}
+function updSc(tname,itemId,score){
+  ensurePr(tname);
+  if(!progress[tname].assessScores)progress[tname].assessScores={};
+  const cur=progress[tname].assessScores[itemId]||0;
+  progress[tname].assessScores[itemId]=cur===score?0:score;
+  scheduleSave();
+  if(role==='trainee')planItems(tname,'plan-wrap',true);
+  else planItems(tname,'plan-wrap',false);
+}
+function updKpi(tname,key,val){
+  ensurePr(tname);
+  if(!progress[tname].kpiValues)progress[tname].kpiValues={};
+  progress[tname].kpiValues[key]=val;
+  scheduleSave();
+}
+ 
+// ── SYNC ─────────────────────────────────────────────────────────────────────
+function setSyncStatus(s){const el=document.getElementById('sync-badge');if(!el)return;el.textContent=s==='synced'?'Synced ✓':s==='syncing'?'⟳ Syncing…':'⚠ Offline';}
+function scheduleSave(){if(saveTimer)clearTimeout(saveTimer);setSyncStatus('syncing');saveTimer=setTimeout(saveBin,1200);}
+async function saveBin(){
+  try{
+    const r=await fetch(API_BASE,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY},body:JSON.stringify({version:3,items,trainees,progress,signoffDone,signoffInfo})});
+    setSyncStatus(r.ok?'synced':'offline');
+  }catch(e){setSyncStatus('offline');}
+}
+ 
+// ── LOGOUT ───────────────────────────────────────────────────────────────────
+function doLogout(){
+  role=null;currentTrainee=null;
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('manager-fields').style.display='none';
+  document.getElementById('trainee-fields').style.display='none';
+  document.getElementById('mgr-pass').value='';
+  document.getElementById('login-error').style.display='none';
+}
+ 
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')doLogin();});
 </script>
 </body>
 </html>
+ 
